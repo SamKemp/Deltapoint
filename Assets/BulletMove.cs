@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BulletMove : MonoBehaviour
 {
+    public int player;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -15,5 +17,18 @@ public class BulletMove : MonoBehaviour
     void FixedUpdate()
     {
         this.GetComponent<Rigidbody>().AddForce(transform.forward);
+    }
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        if (!collision.gameObject.CompareTag("bullet"))
+        {
+            Destroy(gameObject);
+	
+            //if (collision.gameObject.CompareTag("killable"))
+            //{
+                collision.gameObject.SendMessage("Hit", player);
+            //}
+        }
     }
 }
