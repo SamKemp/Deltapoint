@@ -8,51 +8,53 @@ using UnityEngine.UI;
 public class PlayerMove : MonoBehaviour
 {
     public int player;
+	
+	private int _controller;
     
-    private Vector3 movementVector;
-    private Vector3 rotationVector;
+    private Vector3 _movementVector;
+    private Vector3 _rotationVector;
     
-    private Vector3 moveDirection = Vector3.zero;
-    private Vector3 rotationVector2;
+    private Vector3 _moveDirection = Vector3.zero;
+    private Vector3 _rotationVector2;
     
-    private CharacterController characterController;
+    private CharacterController _characterController;
     
     private float movementSpeed = 8;
-    private float rotateSpeed = 40.0f;
+    private float _rotateSpeed = 40.0f;
     
-    public GameObject BulletPrefab;
-    public Transform BulletSpawn;
+    [FormerlySerializedAs("BulletPrefab")] public GameObject bulletPrefab;
+    [FormerlySerializedAs("BulletSpawn")] public Transform bulletSpawn;
     
-    private float Health = 100;
-    private Image HealthBar;
+    private float _health = 100;
+    private Image _healthBar;
 
+    private int _lives = 3;
+    
     private int Deaths = 0;
-    private Text DeathCount;
+    private Text _deathCount;
 
-    private int cooldown = 0;
+    private int _cooldown = 0;
+    private int _cooldownWait = 15;
     
-    Rigidbody m_Rigidbody;
+    Rigidbody _rigidbody;
+
+    public bool keyboard = false;
     
     // Start is called before the first frame update
     void Start()
     {
-        
-        characterController = GetComponent<CharacterController>();
-        HealthBar = GameObject.Find("P" + player + "-Health").GetComponent<Image>();
-        DeathCount = GameObject.Find("P" + player + "-Deaths").GetComponent<Text>();
-        
-        if (player == 0)
-        {
-            //characterController.enabled = false;
-            //m_Rigidbody = this.gameObject.AddComponent<Rigidbody>();
-            //m_Rigidbody.useGravity = false;
-        }
+        _controller = player;
+		
+        _characterController = GetComponent<CharacterController>();
+        _healthBar = GameObject.Find("P" + player + "-Health").GetComponent<Image>();
+        _deathCount = GameObject.Find("P" + player + "-Deaths").GetComponent<Text>();
+        _deathCount.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player == 0)
+        if (player == 1 && keyboard)
          {
              MouseKeyboardMovement();
          }
@@ -66,52 +68,34 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        HealthBar.fillAmount = (Health/100);
-        DeathCount.text = Deaths.ToString();
+        _healthBar.fillAmount = (_health/100);
+        _deathCount.text = Deaths.ToString();
         
-        if (cooldown > 0)
+        if (_cooldown > 0)
         {
-            cooldown--;
+            _cooldown--;
         }
 
-        if (Health <= 0)
+        if (_health <= 0)
         {
-            Health = 100;
-            Deaths++;
+            Destroy(gameObject);
         }
     }
 
     void MouseKeyboardMovement()
     {
         
-        moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-        moveDirection = transform.TransformDirection(moveDirection);
-        moveDirection = moveDirection * movementSpeed;
+        _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
+        _moveDirection = transform.TransformDirection(_moveDirection);
+        _moveDirection = _moveDirection * movementSpeed;
         
         //rotationVector2.y = (-Input.GetAxis("Rotate")) * movementSpeed;
         //rotationVector2.z = 0;
         //rotationVector2.x = 0;
         
         // Move the controller
-        characterController.Move(moveDirection * Time.deltaTime);
+        _characterController.Move(_moveDirection * Time.deltaTime);
         //transform.Rotate(rotationVector2);
-        
-        
-        /*
-        if (Input.GetKey(KeyCode.A))
-            m_Rigidbody.AddForce(Vector3.left * movementSpeed);
-        if (Input.GetKey(KeyCode.D))
-            m_Rigidbody.AddForce(Vector3.right * movementSpeed);
-        if (Input.GetKey(KeyCode.W))
-            m_Rigidbody.AddForce(Vector3.forward * movementSpeed);
-        if (Input.GetKey(KeyCode.S))
-            m_Rigidbody.AddForce(Vector3.back * movementSpeed);
-        
-        if (Input.GetKey(KeyCode.Q))
-            transform.Rotate();
-        if (Input.GetKey(KeyCode.E))
-            m_Rigidbody.AddForce(Vector3.back * movementSpeed);
-        */
         
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse0))
         {
@@ -121,18 +105,27 @@ public class PlayerMove : MonoBehaviour
     
     void ControllerMovement()
     {
-        movementVector.x = Input.GetAxis("LeftJoystickX_P" + player) * movementSpeed;
-        movementVector.z = (-Input.GetAxis("LeftJoystickY_P" + player)) * movementSpeed;
-        movementVector.y = 0;
+        _movementVector.x = Input.GetAxis("LeftJoystickX_P" + _controller) * movementSpeed;
+        _movementVector.z = (-Input.GetAxis("LeftJoystickY_P" + _controller)) * movementSpeed;
+        _movementVector.y = 0;
         
-        rotationVector.y = (-Input.GetAxis("RightJoystickX_P" + player)) * movementSpeed;
-        rotationVector.z = 0;
-        rotationVector.x = 0;
+        _rotationVector.y = (-Input.GetAxis("RightJoystickX_P" + _controller)) * movementSpeed;
+        _rotationVector.z = 0;
+        _rotationVector.x = 0;
         
-        characterController.Move(movementVector * Time.deltaTime);
-        transform.Rotate(rotationVector);
+        _characterController.Move(_movementVector * Time.deltaTime);
+        transform.Rotate(_rotationVector);
 
-        if (Input.GetButtonDown("A_P" + player))
+        //float controllerX = Input.GetAxisRaw("RightJoystickX_P" + _controller);
+        //float controllerY = Input.GetAxisRaw("RightJoystickY_P" + _controller);
+
+        //float rotateAngle = 0.0f;
+
+        //rotateAngle = (Mathf.Atan2(controllerX, controllerY) * Mathf.Rad2Deg) + transform.eulerAngles.y;
+        
+        //transform.rotation = new Quaternion(0, rotateAngle, 0, 0);
+
+        if (Input.GetButtonDown("A_P" + _controller) || Input.GetAxis("RightTrigger_P" + _controller) > 0.5f)
         {
             FireBullet();
         }
@@ -140,11 +133,11 @@ public class PlayerMove : MonoBehaviour
     
     void FireBullet()
     {
-        if (cooldown == 0)
+        if (_cooldown == 0)
         {
-            cooldown = 60;
+            _cooldown = _cooldownWait;
             
-            GameObject bullet = (GameObject) Instantiate(BulletPrefab, BulletSpawn.position, BulletSpawn.rotation);
+            GameObject bullet = (GameObject) Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
             bullet.GetComponent<Renderer>().material = this.GetComponent<Renderer>().material;
             bullet.GetComponent<BulletMove>().player = player;
             bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 10;
@@ -153,7 +146,7 @@ public class PlayerMove : MonoBehaviour
 
     void Hit(int Attacker)
     {
-        Health = Health - 10;
-        Debug.Log("Player " + player + " hit by " + Attacker + " Health = " + Health);
+        _health = _health - 50;
+        //Debug.Log("Player " + player + " hit by " + Attacker + " | Health = " + _health);
     }
 }
