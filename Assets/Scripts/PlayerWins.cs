@@ -26,7 +26,7 @@ public class PlayerWins : MonoBehaviour
     // FixedUpdate is called once every few frames
     void FixedUpdate()
     {
-        players = GameObject.FindGameObjectsWithTag("Player");
+        players = GameObject.FindGameObjectsWithTag("player");
         
         if (players.Length == 1)
         {

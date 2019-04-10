@@ -671,7 +671,7 @@ GameObject:
   - component: {fileID: 209496559}
   m_Layer: 0
   m_Name: Player04
-  m_TagString: Untagged
+  m_TagString: player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1042,7 +1042,7 @@ GameObject:
   - component: {fileID: 393706969}
   m_Layer: 0
   m_Name: Player03
-  m_TagString: Untagged
+  m_TagString: player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1745,7 +1745,7 @@ GameObject:
   - component: {fileID: 821838440}
   m_Layer: 0
   m_Name: Player03_Model
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1935,7 +1935,7 @@ GameObject:
   - component: {fileID: 1059827725}
   m_Layer: 0
   m_Name: Player01
-  m_TagString: Untagged
+  m_TagString: player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2460,7 +2460,7 @@ GameObject:
   - component: {fileID: 1393199141}
   m_Layer: 0
   m_Name: Player01_Model
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2517,7 +2517,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1393199138}
-  m_LocalRotation: {x: 0, y: 0.6990396, z: 0, w: 0.715083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2525,7 +2525,7 @@ Transform:
   - {fileID: 488945698}
   m_Father: {fileID: 1059827723}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 88.7, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1448138018
 GameObject:
   m_ObjectHideFlags: 0
@@ -2539,7 +2539,7 @@ GameObject:
   - component: {fileID: 1448138020}
   m_Layer: 0
   m_Name: Player02_Model
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2834,7 +2834,7 @@ GameObject:
   - component: {fileID: 1635679395}
   m_Layer: 0
   m_Name: Player02
-  m_TagString: Untagged
+  m_TagString: player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2903,7 +2903,7 @@ GameObject:
   - component: {fileID: 1643515722}
   m_Layer: 0
   m_Name: Player04_Model
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

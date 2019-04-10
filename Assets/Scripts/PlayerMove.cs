@@ -23,7 +23,7 @@ public class PlayerMove : MonoBehaviour
     private CharacterController _characterController;
     
     private float movementSpeed = 8;
-    private float _rotateSpeed = 40.0f;
+    //private float _rotateSpeed = 40.0f;
     
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
@@ -31,7 +31,7 @@ public class PlayerMove : MonoBehaviour
     private float _health = 100;
     private Image _healthBar;
 
-    private int _lives = 3;
+    //private int _lives = 3;
     
     private int Deaths = 0;
     private Text _deathCount;
@@ -66,6 +66,11 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player == 1)
+        {
+            Debug.Log(Input.GetAxis("RightJoystickY_P" + _controller) + " | " + Input.GetAxis("RightJoystickX_P" + _controller));
+        }
+        
         if (_dead)
         {
             if (player == 1 && keyboard)
@@ -125,13 +130,13 @@ public class PlayerMove : MonoBehaviour
         _moveDirection = transform.TransformDirection(_moveDirection);
         _moveDirection = _moveDirection * movementSpeed;
         
-        //rotationVector2.y = (-Input.GetAxis("Rotate")) * movementSpeed;
-        //rotationVector2.z = 0;
-        //rotationVector2.x = 0;
+        //rotationVector.y = (-Input.GetAxis("Rotate")) * movementSpeed;
+        //rotationVector.z = 0;
+        //rotationVector.x = 0;
         
         // Move the controller
         _characterController.Move(_moveDirection * Time.deltaTime);
-        //transform.Rotate(rotationVector2);
+        //transform.Rotate(rotationVector);
         
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse0))
         {
