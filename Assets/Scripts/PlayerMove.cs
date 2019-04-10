@@ -66,10 +66,6 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player == 1)
-        {
-            Debug.Log(Input.GetAxis("RightJoystickY_P" + _controller) + " | " + Input.GetAxis("RightJoystickX_P" + _controller));
-        }
         
         if (_dead)
         {
