@@ -37,7 +37,7 @@ public class PlayerWins : MonoBehaviour
         {
             _textObj.text = "Player " + _winner + " Wins";
             _textObj.enabled = true;
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
         }
     }
 }

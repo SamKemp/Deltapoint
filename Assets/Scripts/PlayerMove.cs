@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.LowLevel;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
     public int player;
+
+    private GameObject _model;
 	
 	private int _controller;
     
@@ -22,8 +25,8 @@ public class PlayerMove : MonoBehaviour
     private float movementSpeed = 8;
     private float _rotateSpeed = 40.0f;
     
-    [FormerlySerializedAs("BulletPrefab")] public GameObject bulletPrefab;
-    [FormerlySerializedAs("BulletSpawn")] public Transform bulletSpawn;
+    public GameObject bulletPrefab;
+    public Transform bulletSpawn;
     
     private float _health = 100;
     private Image _healthBar;
@@ -38,13 +41,22 @@ public class PlayerMove : MonoBehaviour
     
     Rigidbody _rigidbody;
 
+    private bool _dead = false;
+
+    private GameObject _rotationPoint;
+
     public bool keyboard = false;
     
     // Start is called before the first frame update
     void Start()
     {
         _controller = player;
-		
+
+        _model = transform.GetChild(0).gameObject;
+        _model.AddComponent<HitRelay>();
+
+        _rotationPoint = transform.GetChild(1).gameObject;
+        
         _characterController = GetComponent<CharacterController>();
         _healthBar = GameObject.Find("P" + player + "-Health").GetComponent<Image>();
         _deathCount = GameObject.Find("P" + player + "-Deaths").GetComponent<Text>();
@@ -54,16 +66,40 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player == 1 && keyboard)
-         {
-             MouseKeyboardMovement();
-         }
-         else
-         {
-             ControllerMovement();
-         }
+        if (_dead)
+        {
+            if (player == 1 && keyboard)
+            {
+                DEADMouseKeyboardMovement();
+            }
+            else
+            {
+                DEADControllerMovement();
+            }
+        }
+        else
+        {
+            if (player == 1 && keyboard)
+            {
+                MouseKeyboardMovement();
+            }
+            else
+            {
+                ControllerMovement();
+            }
+        }
         
         transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+    }
+
+    private void DEADMouseKeyboardMovement()
+    {
+        //NOOP
+    }
+
+    private void DEADControllerMovement()
+    {
+        //NOOP
     }
 
     void FixedUpdate()
@@ -78,11 +114,11 @@ public class PlayerMove : MonoBehaviour
 
         if (_health <= 0)
         {
-            Destroy(gameObject);
+            Dead();
         }
     }
 
-    void MouseKeyboardMovement()
+    private void MouseKeyboardMovement()
     {
         
         _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
@@ -103,50 +139,58 @@ public class PlayerMove : MonoBehaviour
         }
     }
     
-    void ControllerMovement()
+    private void ControllerMovement()
     {
         _movementVector.x = Input.GetAxis("LeftJoystickX_P" + _controller) * movementSpeed;
         _movementVector.z = (-Input.GetAxis("LeftJoystickY_P" + _controller)) * movementSpeed;
         _movementVector.y = 0;
         
-        _rotationVector.y = (-Input.GetAxis("RightJoystickX_P" + _controller)) * movementSpeed;
-        _rotationVector.z = 0;
-        _rotationVector.x = 0;
+        Vector3 rotationPointThingy = new Vector3(Input.GetAxis("RightJoystickY_P" + _controller) * 2, 0, Input.GetAxis("RightJoystickX_P" + _controller) * 2);
+
+        _rotationPoint.transform.localPosition = rotationPointThingy;
+        
+        // The step size is equal to speed times frame time.
+        float step = 10 * Time.deltaTime;
+
+        Vector3 newDir = Vector3.RotateTowards(_model.transform.forward, rotationPointThingy, step, 0.0f);
+        
+        _model.transform.localRotation = Quaternion.LookRotation(newDir);
         
         _characterController.Move(_movementVector * Time.deltaTime);
-        transform.Rotate(_rotationVector);
-
-        //float controllerX = Input.GetAxisRaw("RightJoystickX_P" + _controller);
-        //float controllerY = Input.GetAxisRaw("RightJoystickY_P" + _controller);
-
-        //float rotateAngle = 0.0f;
-
-        //rotateAngle = (Mathf.Atan2(controllerX, controllerY) * Mathf.Rad2Deg) + transform.eulerAngles.y;
-        
-        //transform.rotation = new Quaternion(0, rotateAngle, 0, 0);
 
         if (Input.GetButtonDown("A_P" + _controller) || Input.GetAxis("RightTrigger_P" + _controller) > 0.5f)
         {
             FireBullet();
         }
+
+        if (player == 1 && Input.GetButtonDown("Restart"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
     
-    void FireBullet()
+    private void FireBullet()
     {
         if (_cooldown == 0)
         {
             _cooldown = _cooldownWait;
             
             GameObject bullet = (GameObject) Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-            bullet.GetComponent<Renderer>().material = this.GetComponent<Renderer>().material;
+            bullet.GetComponent<Renderer>().material = _model.GetComponent<Renderer>().material;
             bullet.GetComponent<BulletMove>().player = player;
             bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 10;
         }
     }
 
-    void Hit(int Attacker)
+    public void Hit(int Attacker)
     {
         _health = _health - 50;
-        //Debug.Log("Player " + player + " hit by " + Attacker + " | Health = " + _health);
+    }
+
+    private void Dead()
+    {
+        _dead = true;
+        //Destroy(gameObject);
+        gameObject.tag = "DeadPlayer";
     }
 }
