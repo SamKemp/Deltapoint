@@ -43,7 +43,7 @@ public class PlayerMove : MonoBehaviour
 
     private bool _dead = false;
 
-    private GameObject _rotationPoint;
+    //private GameObject _rotationPoint;
 
     public bool keyboard = false;
     
@@ -55,7 +55,7 @@ public class PlayerMove : MonoBehaviour
         _model = transform.GetChild(0).gameObject;
         _model.AddComponent<HitRelay>();
 
-        _rotationPoint = transform.GetChild(1).gameObject;
+        //_rotationPoint = transform.GetChild(1).gameObject;
         
         _characterController = GetComponent<CharacterController>();
         _healthBar = GameObject.Find("P" + player + "-Health").GetComponent<Image>();
@@ -147,7 +147,7 @@ public class PlayerMove : MonoBehaviour
         
         Vector3 rotationPointThingy = new Vector3(Input.GetAxis("RightJoystickY_P" + _controller) * 2, 0, Input.GetAxis("RightJoystickX_P" + _controller) * 2);
 
-        _rotationPoint.transform.localPosition = rotationPointThingy;
+        //_rotationPoint.transform.localPosition = rotationPointThingy;
         
         // The step size is equal to speed times frame time.
         float step = 10 * Time.deltaTime;
