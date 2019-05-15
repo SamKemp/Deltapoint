@@ -53,7 +53,7 @@ public class PlayerMove : MonoBehaviour
         _controller = player;
 
         _model = transform.GetChild(0).gameObject;
-        _model.AddComponent<HitRelay>();
+        //_model.AddComponent<HitRelay>();
 
         //_rotationPoint = transform.GetChild(1).gameObject;
         
@@ -90,7 +90,7 @@ public class PlayerMove : MonoBehaviour
             }
         }
         
-        transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+        //transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
     }
 
     private void DEADMouseKeyboardMovement()
@@ -191,7 +191,8 @@ public class PlayerMove : MonoBehaviour
     private void Dead()
     {
         _dead = true;
-        //Destroy(gameObject);
-        gameObject.tag = "DeadPlayer";
+        Destroy(gameObject);
+        
+        //gameObject.tag = "DeadPlayer";
     }
 }
