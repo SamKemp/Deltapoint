@@ -12,6 +12,7 @@ public class PlayerWins : MonoBehaviour
     private int _winner = 0;
     
     private Text _textObj;
+    private RawImage _imageObj;
     
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,7 @@ public class PlayerWins : MonoBehaviour
         //Debug.Log(players.Length);
         
         _textObj = this.GetComponent<Text>();
+        _imageObj = GameObject.Find("PlayerWins_BG").GetComponent<RawImage>();
     }
 
     // FixedUpdate is called once every few frames
@@ -37,6 +39,7 @@ public class PlayerWins : MonoBehaviour
         {
             _textObj.text = "Player " + _winner + " Wins";
             _textObj.enabled = true;
+            _imageObj.enabled = true;
             //Time.timeScale = 0;
         }
     }

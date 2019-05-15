@@ -90,7 +90,7 @@ public class PlayerMove : MonoBehaviour
             }
         }
         
-        //transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+        transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
     }
 
     private void DEADMouseKeyboardMovement()
@@ -191,8 +191,15 @@ public class PlayerMove : MonoBehaviour
     private void Dead()
     {
         _dead = true;
-        Destroy(gameObject);
+        _healthBar.fillAmount = (_health/100);
+        
+        Invoke("Kill", 1);
         
         //gameObject.tag = "DeadPlayer";
+    }
+
+    private void Kill()
+    {
+        Destroy(gameObject);
     }
 }

@@ -20,9 +20,9 @@ public class MenuManager : MonoBehaviour
     // Main Menu buttons
     // =================================
 
-    public void PlayBtn()
+    public void PlayBtn(string map)
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene(map);
     }
 
     public void SettingsBtn()
